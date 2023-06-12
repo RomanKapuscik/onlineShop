@@ -8,7 +8,7 @@ from customer import Customer
 class OnlineShoppGUI:
 
     def __init__(self):
-        initialize_products_collection()     # Just to fill the shelves with products.
+        initialize_products_collection()  # Just to fill the shelves with products.
         self.products = [x for x in cluster['onlineShopDB']['products'].find({})]
         self.cart = ShoppingCart()
         self.total_price = 0.0
@@ -23,16 +23,16 @@ class OnlineShoppGUI:
         self.client_data_frame.columnconfigure(0, weight=2)
 
         self.name_label = tk.Label(self.client_data_frame, text='Name: ')
-        self.name_label.grid(row=0, column=0, sticky=tk.W+tk.E)
+        self.name_label.grid(row=0, column=0, sticky=tk.W + tk.E)
         self.name_var = tk.StringVar()
         self.name_entry = tk.Entry(self.client_data_frame, textvariable=self.name_var)
-        self.name_entry.grid(row=0, column=1, sticky=tk.W+tk.E)
+        self.name_entry.grid(row=0, column=1, sticky=tk.W + tk.E)
 
         self.surname_label = tk.Label(self.client_data_frame, text='Surname: ')
-        self.surname_label.grid(row=1, column=0, sticky=tk.W+tk.E)
+        self.surname_label.grid(row=1, column=0, sticky=tk.W + tk.E)
         self.surname_var = tk.StringVar()
         self.surname_entry = tk.Entry(self.client_data_frame, textvariable=self.surname_var)
-        self.surname_entry.grid(row=1, column=1, sticky=tk.W+tk.E)
+        self.surname_entry.grid(row=1, column=1, sticky=tk.W + tk.E)
 
         self.products_frame = tk.Frame(self.root)
         self.products_frame.columnconfigure(0, weight=1)
@@ -82,14 +82,16 @@ class OnlineShoppGUI:
         self.root.mainloop()
 
     def button_prest(self):
-        idx = 0
-        for checkbox in self.product_check:
-            if checkbox.get():
-                self.cart.add(self.products[idx]['name'])
-            idx += 1
-        self.total_price = self.cart.get_total_price()
-        print(self.name_var.get(), self.surname_var.get())
-        Customer(self.name_var.get(), self.surname_var.get()).add_cart_to_customer(self.cart)
+        if self.name_var.get() or self.surname_var.get():
+            idx = 0
+            for checkbox in self.product_check:
+                if checkbox.get():
+                    self.cart.add(self.products[idx]['name'])
+                idx += 1
+            self.total_price = self.cart.get_total_price()
+            print(self.name_var.get(), self.surname_var.get())
+            Customer(self.name_var.get(), self.surname_var.get()).add_cart_to_customer(self.cart)
+            self.root.destroy()
 
 
 OnlineShoppGUI()
