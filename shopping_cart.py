@@ -1,9 +1,10 @@
+from cluster_connection import cluster
 from typing import List
-from item_database import get_price
+from products_collection import get_price
 
 
 class ShoppingCart:
-    def __init__(self, max_size: int):
+    def __init__(self, max_size: int = 5):
         self.max_size = max_size
         self.items: List[str] = []
 
@@ -24,5 +25,7 @@ class ShoppingCart:
             total_price += get_price(item)
         return total_price
 
-
-
+    def create_shopping_cart_in_db(self):
+        db = cluster['onlineShopDB']
+        collection_carts = db['carts']
+        collection_carts.insert({'items': self.items})
