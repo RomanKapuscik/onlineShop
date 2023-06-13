@@ -9,7 +9,7 @@ class OnlineShoppGUI:
 
     def __init__(self):
         initialize_products_collection()  # Just to fill the shelves with products.
-        self.products = [x for x in cluster['onlineShopDB']['products'].find({})]
+        self.products = [x for x in cluster['onlineShopDB']['products'].find({})]  # download products from DB
         self.cart = ShoppingCart()
         self.total_price = 0.0
 
@@ -34,6 +34,8 @@ class OnlineShoppGUI:
         self.surname_entry = tk.Entry(self.client_data_frame, textvariable=self.surname_var)
         self.surname_entry.grid(row=1, column=1, sticky=tk.W + tk.E)
 
+        self.instruction_label = tk.Label(self.root, text='Please select products for Your order \n'
+                                                          'and press Add to create order.')
         self.products_frame = tk.Frame(self.root)
         self.products_frame.columnconfigure(0, weight=1)
         self.products_frame.columnconfigure(0, weight=2)
@@ -74,8 +76,9 @@ class OnlineShoppGUI:
         self.button_add = tk.Button(self.buttons_frame, text='Add', command=self.button_prest)
         self.button_add.grid(row=0, column=0, sticky=tk.W + tk.E)
 
-        self.client_data_label.pack(padx=20, pady=20)
+        self.client_data_label.pack(padx=10, pady=10)
         self.client_data_frame.pack(padx=10, pady=10)
+        self.instruction_label.pack(padx=10, pady=10)
         self.products_frame.pack(padx=10, pady=10)
         self.buttons_frame.pack(padx=10, pady=10)
 
@@ -89,7 +92,6 @@ class OnlineShoppGUI:
                     self.cart.add(self.products[idx]['name'])
                 idx += 1
             self.total_price = self.cart.get_total_price()
-            print(self.name_var.get(), self.surname_var.get())
             Customer(self.name_var.get(), self.surname_var.get()).add_cart_to_customer(self.cart)
             self.root.destroy()
 

@@ -19,7 +19,7 @@ class Customer:
                     return True
         return False
 
-    def add_new_customer(self):
+    def add_new_customer(self) -> bool:
         if not self.__check_if_name_in_db(self.name, self.surname):
             self.collection.insert_one({'name': self.name, 'surname': self.surname, 'orders': []})
             return True
@@ -29,12 +29,8 @@ class Customer:
     def add_cart_to_customer(self, shopping_cart: ShoppingCart):
         self.add_new_customer()
         self.collection.update_one({'name': self.name, 'surname': self.surname},
-                                   {'$push': {'orders':
-                                       {
+                                   {'$push': {'orders': {
                                            'products': shopping_cart.items,
                                            'total': shopping_cart.get_total_price(),
                                            'order_data_time': datetime.datetime.utcnow(),
-                                           'status': 'new'
-                                       }}})
-# client_1 = Customer('Adam', 'Nowak')
-# client_1.add_new_customer()
+                                           'status': 'new'}}})
